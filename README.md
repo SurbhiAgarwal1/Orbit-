@@ -2,7 +2,29 @@
 
 > **Every city has a pulse. We track it.**
 
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green?style=flat-square&logo=fastapi)
+![Three.js](https://img.shields.io/badge/Three.js-WebGL-black?style=flat-square&logo=three.js)
+![Google Gemini](https://img.shields.io/badge/Gemini_AI-1.5_Flash-orange?style=flat-square&logo=google)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue?style=flat-square&logo=docker)
+
 ΩRBIT is an enterprise-grade Smart City Operating System designed to centralize municipal operations, automate civic grievance processing via generative artificial intelligence, and provide real-time spatial and 3D telemetry visualization. Built for high-concurrency civic environments, ΩRBIT integrates procedural WebGL urban modeling, automated Natural Language Processing (NLP) routing, real-time weather analytics, and multi-persona command centers.
+
+---
+
+## Interactive Navigation
+
+- [Market Problem & ΩRBIT Solution](#market-problem--orbit-solution)
+- [Technical Architecture](#technical-architecture)
+- [Technical Stack](#technical-stack)
+- [Key Platform Features](#key-platform-features)
+- [Procedural Architectural Profiles](#procedural-architectural-profiles)
+- [Project Structure](#project-structure)
+- [Running Locally & Deployment](#running-locally)
+- [Environment Variables Configuration](#environment-variables-configuration)
+- [Interactive API Reference](#api-reference-overview)
+- [License & Compliance](#license--operational-compliance)
 
 ---
 
@@ -53,7 +75,9 @@ The platform follows a modular microservices architecture separating client pres
                           +-------------------------------+                                                 +-------------------------------+
 ```
 
-### Technical Stack
+---
+
+## Technical Stack
 
 | Category | Technology | Purpose |
 | :--- | :--- | :--- |
@@ -83,16 +107,26 @@ The platform follows a modular microservices architecture separating client pres
 
 ## Procedural Architectural Profiles
 
-ΩRBIT generates specialized procedural architectural structures matching the distinct visual identities of major Indian metropolises:
+<details>
+<summary><strong>Click to Expand Municipal 3D Profile Specifications</strong></summary>
+
+<br />
 
 - **Lucknow HQ**: Heritage Awadhi architectural structures featuring octagonal minaret towers, stepped sandstone blocks, terracotta color palettes, and top-mounted onion domes.
 - **Mumbai Coast**: Dense maritime skyscrapers featuring twin high-rise towers joined by mid-section skybridges, slanted-roof cylindrical glass towers, and a surrounding coastal water plane.
 - **Delhi Capital**: Lutyens-inspired low-rise government blocks, circular colonnade assembly structures, white marble support porticos, and red sandstone domes interspersed with green park spaces.
 - **Bengaluru Tech**: Modern corporate tech complexes featuring 45-degree rotated modules, metallic diagrid exterior structural bracing, dark glass facades, and eco-tech roof gardens.
 
+</details>
+
 ---
 
 ## Project Structure
+
+<details>
+<summary><strong>Click to Expand Repository Directory Tree</strong></summary>
+
+<br />
 
 ```text
 orbit/
@@ -113,6 +147,8 @@ orbit/
 └── docker-compose.yml              # Multi-container orchestration specification
 ```
 
+</details>
+
 ---
 
 ## Running Locally
@@ -121,7 +157,10 @@ orbit/
 - Node.js (v18.0.0 or higher)
 - Python (v3.11 or higher)
 
-### Option A: Manual Setup
+<details>
+<summary><strong>Option A: Manual Local Setup Instructions</strong></summary>
+
+<br />
 
 #### 1. Backend Service Configuration
 Navigate to the backend directory, establish a Python 3.11 virtual environment, and install dependencies:
@@ -151,15 +190,20 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
----
+</details>
 
-### Option B: Docker Compose Deployment
+<details>
+<summary><strong>Option B: Docker Compose Deployment Instructions</strong></summary>
+
+<br />
 
 To execute containerized deployment for the multi-container architecture:
 
 ```bash
 docker-compose up --build
 ```
+
+</details>
 
 ---
 
@@ -181,6 +225,11 @@ OPENWEATHER_API_KEY=your_openweather_api_key_here
 
 ## API Reference Overview
 
+<details open>
+<summary><strong>Interactive API Endpoints Table</strong></summary>
+
+<br />
+
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | **GET** | `/api/analytics/summary?city={city}` | Retrieves composite Ω-Score, active ticket counts, AQI telemetry, and ward statistics. |
@@ -190,13 +239,7 @@ OPENWEATHER_API_KEY=your_openweather_api_key_here
 | **POST** | `/api/brain/chat` | Interfaces with Gemini AI automated civic query and routing assistant. |
 | **GET** | `/api/weather?city={city}` | Fetches live weather conditions and atmospheric pollution metrics. |
 
----
-
-## Design System & Ergonomics
-
-- **Typography**: Space Grotesk (Display Headers), Inter (Interface Body), JetBrains Mono (Telemetry Data & Ticket IDs).
-- **Color Palette**: Pure white/near-black theme variables (`data-theme`), clean solid structural borders, distinct status alerts.
-- **Ambient Elements**: Subtle breathing pulse rings (`PulseRing`) surrounding critical composite Ω-Score gauges.
+</details>
 
 ---
 
