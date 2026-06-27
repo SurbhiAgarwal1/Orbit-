@@ -626,8 +626,9 @@ export default function DashboardPage() {
                         <td className="mono" style={{ padding: '16px 24px', fontWeight: 700 }}>
                           #ORB-{c.id.slice(0, 4).toUpperCase()}
                         </td>
-                        <td style={{ padding: '16px 24px', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {c.title}
+                        <td style={{ padding: '16px 24px', maxWidth: '380px' }}>
+                          <div style={{ fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: '4px' }}>{c.title}</div>
+                          <div style={{ fontSize: '12px', opacity: 0.8, lineHeight: '1.4', color: 'var(--primary-text)' }}>{c.description}</div>
                         </td>
                         <td className="mono" style={{ padding: '16px 24px', textTransform: 'uppercase', fontSize: '11px' }}>
                           {c.category}
