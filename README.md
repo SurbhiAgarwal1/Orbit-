@@ -82,10 +82,40 @@ The platform follows a modular microservices architecture separating client pres
 
 ```text
 orbit/
-├── frontend/        # Next.js 14 Web Application
-├── backend/         # FastAPI Python Microservice
-├── supabase/        # PostgreSQL Database Schema & Realtime Policies
-└── docker-compose.yml # Multi-container orchestration specification
+├── backend/                        # FastAPI Async Microservice (Python 3.11)
+│   ├── models/                     # Pydantic Schemas & Data Validation (`schemas.py`)
+│   ├── services/                   # Business Logic & External Integrations
+│   │   ├── gemini_service.py       # Google Gemini AI Triage & Hinglish Chat
+│   │   ├── health_score.py         # Formula-driven Ω-Score Calculation Engine
+│   │   └── weather_cache.py        # OpenWeather & AQI Atmospheric Caching
+│   ├── main.py                     # Primary Uvicorn Server Routes & Middleware
+│   ├── Dockerfile                  # Container Deployment Definition
+│   └── requirements.txt            # Python Dependencies Specification
+│
+├── frontend/                       # Next.js Web Application (TypeScript)
+│   ├── app/                        # App Router Navigation & Pages
+│   │   ├── admin/                  # Executive Municipal Control Desk
+│   │   ├── brain/                  # Gemini AI Chat Assistant
+│   │   ├── dashboard/              # Multi-Persona Workspace State Engine
+│   │   ├── map/                    # Leaflet Spatial GIS & Overlay View
+│   │   ├── submit/                 # Voice Dictation & Signal Reporting Form
+│   │   ├── layout.tsx              # Root Layout, Telemetry Header, & Clock Sync
+│   │   └── page.tsx                # 3D City Hero Grid & Real-time KPI Cards
+│   ├── components/                 # Client Components & Graphics Systems
+│   │   ├── forms/                  # Voice Input & Incident Signal Processing
+│   │   ├── map/                    # Leaflet Cluster Markers & Density Heatmaps
+│   │   ├── three/                  # Three.js WebGL Engine (`CityScene.tsx`)
+│   │   └── ui/                     # Design Tokens (`KPICard`, `OmegaGauge`, `ThemeToggle`)
+│   ├── styles/                     # Modular CSS Property Tokens & Themes
+│   ├── Dockerfile                  # Frontend Build Container Definition
+│   └── package.json                # Node.js Package Manifest
+│
+├── supabase/                       # Database Governance & Persistence
+│   └── schema.sql                  # PostgreSQL Tables, Trigger Policies, & Migrations
+│
+├── docker-compose.yml              # Multi-Container Orchestration Blueprint
+├── .env.example                    # Template Environment Variables Specification
+└── README.md                       # Platform System Documentation
 ```
 
 ---
