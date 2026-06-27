@@ -82,10 +82,21 @@ The platform follows a modular microservices architecture separating client pres
 
 ```text
 orbit/
-├── backend/                        # FastAPI Async Microservices
-├── frontend/                       # Next.js Web Application
-├── supabase/                       # PostgreSQL Database Governance
-└── docker-compose.yml              # Multi-Container Orchestration Specification
+├── backend/                        # FastAPI Async Microservice (Python 3.11)
+│   ├── models/                     # Data validation schemas
+│   ├── services/                   # AI triage, Ω-Score engine, & weather services
+│   ├── main.py                     # Server routes & API middleware
+│   └── Dockerfile                  # Backend container configuration
+│
+├── frontend/                       # Next.js Web Application (TypeScript)
+│   ├── app/                        # Main application routes (Dashboard, Admin, Brain, Map)
+│   ├── components/                 # Three.js 3D WebGL engine, Leaflet GIS, & UI tiles
+│   └── styles/                     # Design system CSS properties & theme tokens
+│
+├── supabase/                       # PostgreSQL database schema & realtime rules
+│   └── schema.sql                  
+│
+└── docker-compose.yml              # Multi-container orchestration specification
 ```
 
 ---
