@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { useCity } from '../../components/ui/ThemeToggle';
 import Link from 'next/link';
@@ -159,8 +159,8 @@ export default function DashboardPage() {
     return `${days} days ago`;
   };
 
-  // Filters for Admin
-  const getAdminFilteredComplaints = () => {
+  // Memoized Filters for Admin
+  const adminFilteredComplaints = useMemo(() => {
     let result = [...complaints];
     if (adminFilter === 'Critical') {
       result = result.filter(c => c.priority_score >= 80 && c.status !== 'resolved');
@@ -172,20 +172,23 @@ export default function DashboardPage() {
       result = result.filter(c => !c.assigned_dept || c.status === 'pending');
     }
     return result;
-  };
+  }, [complaints, adminFilter]);
+  const getAdminFilteredComplaints = () => adminFilteredComplaints;
 
-  // Filters for Officer
-  const getOfficerComplaints = () => {
+  // Memoized Filters for Officer
+  const officerComplaints = useMemo(() => {
     return complaints.filter(c => c.assigned_dept === selectedDept);
-  };
+  }, [complaints, selectedDept]);
+  const getOfficerComplaints = () => officerComplaints;
 
-  // Filters for Citizen
-  const getCitizenComplaints = () => {
+  // Memoized Filters for Citizen
+  const citizenComplaints = useMemo(() => {
     return complaints.filter(c => 
       c.user_id === '22222222-2222-4222-b222-222222222222' || 
       myComplaintIds.includes(c.id)
     );
-  };
+  }, [complaints, myComplaintIds]);
+  const getCitizenComplaints = () => citizenComplaints;
 
   // Get active status details for drawer
   const assignedOfficerInfo = selectedComplaint?.assigned_dept 

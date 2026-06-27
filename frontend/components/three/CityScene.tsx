@@ -72,12 +72,12 @@ export const CityScene: React.FC<CitySceneProps> = ({ wards, complaints, city })
     const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
     camera.position.set(75, 80, 75);
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    // Renderer (Optimized for ultra-smooth FPS and low GPU overhead)
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap; 
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
     container.appendChild(renderer.domElement);
 
     // OrbitControls
@@ -94,8 +94,8 @@ export const CityScene: React.FC<CitySceneProps> = ({ wards, complaints, city })
 
     const dirLight = new THREE.DirectionalLight(0xffffff, theme === 'dark' ? 0.7 : 1.1);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 2048;
-    dirLight.shadow.mapSize.height = 2048;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
     scene.add(dirLight);
 
     // --- PROCEDURAL GENERATION: CITY GRID (~200 Buildings, Seeded by City) ---
