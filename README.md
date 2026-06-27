@@ -6,6 +6,20 @@
 
 ---
 
+## Market Problem & ΩRBIT Solution
+
+### The Current Market Problem
+- **Massive Inefficiency & Resolution Latency**: Municipal grievance redressal systems in developing smart cities suffer from an average resolution latency of 21 days due to manual paperwork and fragmented departmental communication.
+- **Siloed Systems & Data Blind Spots**: City administration controls lack unified real-time telemetry. Water, electricity, sanitation, and public works operate in isolated silos without spatial or predictive visibility.
+- **High-Friction Civic Reporting**: Citizens face complex submission portals, manual form filling, and zero visibility into the real-time resolution status of their reported issues.
+
+### The ΩRBIT Solution
+- **Target Resolution Velocity (4 Days)**: Automates municipal routing and ticket lifecycle management to compress average grievance lifecycles from 21 days down to 4 days.
+- **Unified 3D Spatial Operating System**: Synthesizes real-time civic telemetry, OpenWeather atmospheric data, and ward-level health scoring into an interactive WebGL 3D urban twin and Leaflet GIS mapping overlay.
+- **Generative AI Triage & Multilingual Voice Accessibility**: Replaces manual form filing with Web Speech voice dictation (English/Hindi) and leverages Google Gemini AI for automated severity scoring (0-100), domain classification, and direct operational officer routing.
+
+---
+
 ## Technical Architecture
 
 The platform follows a modular microservices architecture separating client presentation, real-time WebGL rendering, intelligent orchestration, and database persistence.
