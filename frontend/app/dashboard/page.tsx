@@ -701,12 +701,24 @@ export default function DashboardPage() {
 
           <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <h2 className="h2" style={{ fontFamily: 'var(--font-display)', marginBottom: '8px' }}>
+              <h2 className="h2" style={{ fontFamily: 'var(--font-display)', marginBottom: '12px' }}>
                 {selectedComplaint.title}
               </h2>
-              <p style={{ fontSize: '14px', opacity: 0.8, lineHeight: '1.6' }}>
-                {selectedComplaint.description}
-              </p>
+              
+              <div style={{
+                border: '1px solid var(--border)',
+                backgroundColor: 'var(--surface)',
+                padding: '16px',
+                marginBottom: '16px',
+                borderLeft: '4px solid var(--primary-text)'
+              }}>
+                <span className="mono" style={{ fontSize: '10px', opacity: 0.6, display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  ORIGINAL USER COMPLAINT DESCRIPTION
+                </span>
+                <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--primary-text)', whiteSpace: 'pre-wrap' }}>
+                  {selectedComplaint.description}
+                </p>
+              </div>
             </div>
 
             {selectedComplaint.image_url && (
