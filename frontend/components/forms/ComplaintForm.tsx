@@ -39,6 +39,7 @@ export const ComplaintForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const analysisPanelRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   // Sync coords to active city selection
@@ -57,16 +58,25 @@ export const ComplaintForm: React.FC = () => {
     setIsDragging(false);
   };
 
+  const processFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      processFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      processFile(e.target.files[0]);
     }
   };
 
@@ -196,7 +206,15 @@ export const ComplaintForm: React.FC = () => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <label className="label" style={{ opacity: 0.6, textTransform: 'uppercase' }}>Photo Evidence</label>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              accept="image/*"
+              style={{ display: 'none' }}
+            />
             <div
+              onClick={() => fileInputRef.current?.click()}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -222,7 +240,10 @@ export const ComplaintForm: React.FC = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => setImage(null)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setImage(null);
+                    }}
                     style={{
                       position: 'absolute',
                       top: '4px',
