@@ -1,0 +1,27 @@
+/* CSS custom properties for Light and Dark themes */
+
+[data-theme="light"] {
+  --background: #FFFFFF;
+  --surface: #F5F5F5;
+  --primary-text: #0A0A0A;
+  --accent: #0A0A0A;
+  --border: #E0E0E0;
+  --danger: #D03B3B;
+  --success: #1A7A4A;
+  --glass-bg: rgba(245, 245, 245, 0.7);
+  --glass-border: rgba(224, 224, 224, 0.5);
+  --glow-intensity: 0 0 10px rgba(10, 10, 10, 0.15);
+}
+
+[data-theme="dark"] {
+  --background: #080808;
+  --surface: #111111;
+  --primary-text: #F0F0F0;
+  --accent: #FFFFFF;
+  --border: #222222;
+  --danger: #E05555;
+  --success: #22A060;
+  --glass-bg: rgba(17, 17, 17, 0.7);
+  --glass-border: rgba(34, 34, 34, 0.5);
+  --glow-intensity: 0 0 10px rgba(255, 255, 255, 0.15);
+}

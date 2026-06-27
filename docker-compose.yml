@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  orbit-db:
+    image: postgres:15-alpine
+    container_name: orbit-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: orbit
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./supabase/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  orbit-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: orbit-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=
+      - SUPABASE_ANON_KEY=
+      - GEMINI_API_KEY=
+      - OPENWEATHER_API_KEY=
+    depends_on:
+      - orbit-db
+
+  orbit-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: orbit-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - orbit-backend
+
+volumes:
+  pgdata:
