@@ -28,8 +28,6 @@
 
 ---
 
-## Market Problem & ΩRBIT Solution
-
 ### The Current Market Problem
 - **Massive Inefficiency & Resolution Latency**: Municipal grievance redressal systems in developing smart cities suffer from an average resolution latency of 21 days due to manual paperwork and fragmented departmental communication.
 - **Siloed Systems & Data Blind Spots**: City administration controls lack unified real-time telemetry. Water, electricity, sanitation, and public works operate in isolated silos without spatial or predictive visibility.
