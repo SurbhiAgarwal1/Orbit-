@@ -4,6 +4,10 @@ node_modules/
 venv/
 ENV/
 
+# Python cache
+__pycache__/
+*.pyc
+
 # Next.js build output
 .next/
 out/
