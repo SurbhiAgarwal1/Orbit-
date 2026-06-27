@@ -32,6 +32,8 @@ export const ComplaintForm: React.FC = () => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [address, setAddress] = useState('');
+  const [isLocating, setIsLocating] = useState(false);
   const [latitude, setLatitude] = useState(26.8467);
   const [longitude, setLongitude] = useState(80.9462);
   const [image, setImage] = useState<string | null>(null);
@@ -42,11 +44,41 @@ export const ComplaintForm: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  // Auto detect GPS location via Browser Geolocation API
+  const handleAutoDetectLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = parseFloat(position.coords.latitude.toFixed(6));
+        const lng = parseFloat(position.coords.longitude.toFixed(6));
+        setLatitude(lat);
+        setLongitude(lng);
+        setAddress(`GPS Position: ${lat}, ${lng} (${city})`);
+        setIsLocating(false);
+      },
+      (error) => {
+        console.warn('Geolocation error:', error);
+        // Fallback to active city center coordinates
+        const coords = CITY_COORDS[city] || CITY_COORDS.Lucknow;
+        setLatitude(coords[0]);
+        setLongitude(coords[1]);
+        setAddress(`Central ${city} Sector HQ`);
+        setIsLocating(false);
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  };
+
   // Sync coords to active city selection
   useEffect(() => {
     const coords = CITY_COORDS[city] || CITY_COORDS.Lucknow;
     setLatitude(coords[0]);
     setLongitude(coords[1]);
+    setAddress(`Sector 4, ${city} Municipal Area`);
   }, [city]);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -264,6 +296,44 @@ export const ComplaintForm: React.FC = () => {
                 </span>
               )}
             </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label className="label" style={{ opacity: 0.6, textTransform: 'uppercase' }}>Location Address / Landmark</label>
+              <button
+                type="button"
+                onClick={handleAutoDetectLocation}
+                disabled={isLocating}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: 'var(--accent)',
+                  border: '1px solid var(--accent)',
+                  padding: '4px 8px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '10px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  fontWeight: 700
+                }}
+              >
+                {isLocating ? '📍 Fetching GPS...' : '📍 Auto-Detect My Location'}
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="e.g. Near Metro Station Gate 3, Sector G"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              style={{
+                backgroundColor: 'var(--surface)',
+                border: '1px solid var(--border)',
+                padding: '12px',
+                color: 'var(--primary-text)',
+                fontFamily: 'var(--font-body)',
+                outline: 'none'
+              }}
+            />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
