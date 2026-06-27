@@ -116,15 +116,13 @@ export const ComplaintForm: React.FC = () => {
           console.warn('Failed to write to localStorage:', err);
         }
         
-        setTimeout(() => {
-          setAnalysisResult(result);
-          setTitle('');
-          setDescription('');
-          setImage(null);
-          setIsSubmitting(false);
+        setAnalysisResult(result);
+        setTitle('');
+        setDescription('');
+        setImage(null);
+        setIsSubmitting(false);
 
-          window.dispatchEvent(new CustomEvent('complaintsubmit', { detail: result }));
-        }, 1500);
+        window.dispatchEvent(new CustomEvent('complaintsubmit', { detail: result }));
 
       } else {
         throw new Error('Server error');

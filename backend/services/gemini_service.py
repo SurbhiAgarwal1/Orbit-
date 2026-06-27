@@ -94,8 +94,6 @@ def classify_complaint_offline(text: str) -> Dict[str, Any]:
 async def classify_complaint(text: str) -> Dict[str, Any]:
     """Classifies a civic complaint using Gemini or falls back to heuristic matching."""
     if not model:
-        # Simulate slight network latency to match "AI is analyzing..." experience
-        time.sleep(1.0)
         return classify_complaint_offline(text)
         
     prompt = f"""You are a civic complaint classifier for an Indian smart city.
