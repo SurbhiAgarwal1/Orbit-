@@ -29,11 +29,11 @@ def classify_complaint_offline(text: str) -> Dict[str, Any]:
     urgency_label = "Medium"
     ai_tags = ["civic_signal"]
 
-    # 1. EMERGENCY & FIRE HAZARDS (Critical priority 85-98)
-    if any(k in text_lower for k in ["fire", "aag", "smoke", "dhuwa", "blast", "explosion", "flame", "burning", "short circuit", "spark", "gas leak", "cylinder"]):
-        category = "electricity" if any(k in text_lower for k in ["circuit", "spark", "wire", "transformer", "current"]) else "other"
-        suggested_dept = "Electricity Board (LESA)" if category == "electricity" else "City Administration & Other Services"
-        priority_score = 95
+    # 1. EMERGENCY & FIRE HAZARDS (Critical priority 90-98)
+    if any(k in text_lower for k in ["fire", "aag", "smoke", "dhuwa", "blast", "explosion", "flame", "burning", "short circuit", "spark", "gas leak", "cylinder", "fire hazard"]):
+        category = "electricity"
+        suggested_dept = "Electricity Board (LESA)"
+        priority_score = 96
         urgency_label = "Critical"
         ai_tags = ["fire_hazard", "life_safety", "emergency_dispatch"]
 
@@ -94,16 +94,16 @@ def classify_complaint_offline(text: str) -> Dict[str, Any]:
     urgent_matches = sum(1 for k in urgent_keywords if k in text_lower)
     
     if urgent_matches > 0:
-        priority_score = min(99, priority_score + (urgent_matches * 6))
+        priority_score = min(99, priority_score + (urgent_matches * 5))
         if priority_score >= 85:
             urgency_label = "Critical"
         elif priority_score >= 70:
             urgency_label = "High"
 
-    # Add hash variation based on character code to guarantee non-static priority numbers
+    # Add hash variation based on character code to guarantee unique priority numbers per submission
     char_sum = sum(ord(c) for c in text)
-    variance = (char_sum % 7) - 3
-    priority_score = max(15, min(99, priority_score + variance))
+    variance = (char_sum % 5) - 2
+    priority_score = max(20, min(99, priority_score + variance))
 
     return {
         "category": category,
@@ -124,7 +124,7 @@ Given this complaint: '{text}'
 Return JSON with the following schema:
 {{
   "category": "road" | "water" | "electricity" | "sanitation" | "other",
-  "priority_score": int,      // 0-100 based on safety risk + number of people affected + urgency (e.g. fire/accidents = 85-98)
+  "priority_score": int,      // 0-100 based on safety risk + number of people affected + urgency (e.g. fire/accidents = 90-98)
   "urgency_label": "Critical" | "High" | "Medium" | "Low",
   "suggested_dept": "Public Works Department (PWD)" | "Water Works (Jal Sansthan)" | "Electricity Board (LESA)" | "Municipal Corporation Sanitation" | "City Administration & Other Services",
   "ai_tags": list of string (max 3),
