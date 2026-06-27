@@ -39,7 +39,11 @@ export default function DashboardPage() {
   const [myComplaintIds, setMyComplaintIds] = useState<string[]>([]);
   const [selectedDept, setSelectedDept] = useState<string>('Public Works Department (PWD)');
   const [adminFilter, setAdminFilter] = useState('All');
-  
+  // Emergency Red Alert State for Admin Panel
+  const [emergencyModalTicket, setEmergencyModalTicket] = useState<ComplaintItem | null>(null);
+  const audioContextRef = useRef<any>(null);
+  const sirenIntervalRef = useRef<any>(null);
+
   // Drawer details
   const [selectedComplaint, setSelectedComplaint] = useState<ComplaintItem | null>(null);
   const [showDrawer, setShowDrawer] = useState(false);
@@ -52,6 +56,54 @@ export default function DashboardPage() {
     'Municipal Corporation Sanitation',
     'City Administration & Other Services'
   ];
+
+  // Synthesize Two-Tone Web Audio Emergency Siren Sound
+  const playEmergencySiren = () => {
+    try {
+      const AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      
+      if (!audioContextRef.current) {
+        audioContextRef.current = new AudioContext();
+      }
+      const ctx = audioContextRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(960, ctx.currentTime); // High pitch A5
+      osc.frequency.exponentialRampToValueAtTime(480, ctx.currentTime + 0.35); // Low pitch A4
+      osc.frequency.exponentialRampToValueAtTime(960, ctx.currentTime + 0.7);
+      
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.75);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.75);
+    } catch (e) {
+      console.warn('Web Audio Siren playback error:', e);
+    }
+  };
+
+  const startContinuousSiren = () => {
+    stopContinuousSiren();
+    playEmergencySiren();
+    sirenIntervalRef.current = setInterval(() => {
+      playEmergencySiren();
+    }, 900);
+  };
+
+  const stopContinuousSiren = () => {
+    if (sirenIntervalRef.current) {
+      clearInterval(sirenIntervalRef.current);
+      sirenIntervalRef.current = null;
+    }
+  };
 
   // Fetch complaints
   const fetchComplaints = async () => {
@@ -85,16 +137,30 @@ export default function DashboardPage() {
     }
   }, [city]);
 
-  // Listen to external triggers
+  // Listen to external triggers & trigger Emergency Red Alert for Admin
   useEffect(() => {
-    const handleNewSubmission = () => fetchComplaints();
+    const handleNewSubmission = (e: any) => {
+      fetchComplaints();
+      const ticket = e?.detail;
+      if (ticket && ticket.priority_score >= 80) {
+        setEmergencyModalTicket(ticket);
+        startContinuousSiren();
+      }
+    };
+
     window.addEventListener('complaintsubmit', handleNewSubmission);
-    window.addEventListener('complaintupdate', handleNewSubmission);
+    window.addEventListener('complaintupdate', fetchComplaints);
     return () => {
       window.removeEventListener('complaintsubmit', handleNewSubmission);
-      window.removeEventListener('complaintupdate', handleNewSubmission);
+      window.removeEventListener('complaintupdate', fetchComplaints);
+      stopContinuousSiren();
     };
   }, [city]);
+
+  const dismissEmergencyModal = () => {
+    stopContinuousSiren();
+    setEmergencyModalTicket(null);
+  };
 
   const handleRowClick = (complaint: ComplaintItem) => {
     setSelectedComplaint(complaint);
@@ -826,6 +892,121 @@ export default function DashboardPage() {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* --- ADMIN EXCLUSIVE EMERGENCY RED ALERT POPUP MODAL --- */}
+      {activePersona === 'admin' && emergencyModalTicket && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+          backdropFilter: 'blur(10px)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '24px'
+        }}>
+          <div style={{
+            backgroundColor: 'var(--surface)',
+            border: '3px solid var(--danger)',
+            boxShadow: '0 0 40px rgba(224, 60, 49, 0.6)',
+            maxWidth: '560px',
+            width: '100%',
+            padding: '32px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+            animation: 'breathing-pulse 1.2s infinite'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--danger)', pb: '12px', paddingBottom: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '24px', animation: 'ping 1s infinite' }}>🚨</span>
+                <span className="mono" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--danger)', letterSpacing: '0.08em' }}>
+                  ADMIN CRITICAL RED ALERT
+                </span>
+              </div>
+              <span className="mono" style={{ fontSize: '12px', backgroundColor: 'var(--danger)', color: 'white', padding: '3px 8px', fontWeight: 700 }}>
+                PRIORITY {emergencyModalTicket.priority_score}/100
+              </span>
+            </div>
+
+            <div>
+              <span className="mono" style={{ fontSize: '11px', opacity: 0.6 }}>TICKET #ORB-{emergencyModalTicket.id.slice(0, 6).toUpperCase()}</span>
+              <h2 className="h2" style={{ fontFamily: 'var(--font-display)', fontSize: '22px', marginTop: '4px', color: 'var(--primary-text)' }}>
+                {emergencyModalTicket.title}
+              </h2>
+            </div>
+
+            <div style={{
+              backgroundColor: 'var(--background)',
+              border: '1px solid var(--border)',
+              padding: '16px',
+              borderLeft: '4px solid var(--danger)'
+            }}>
+              <span className="mono" style={{ fontSize: '10px', opacity: 0.6, display: 'block', marginBottom: '6px' }}>
+                LIVE COMPLAINT SIGNAL DESCRIPTION
+              </span>
+              <p style={{ fontSize: '14px', lineHeight: '1.5', color: 'var(--primary-text)' }}>
+                {emergencyModalTicket.description}
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
+              <div>
+                <span className="label" style={{ opacity: 0.6 }}>ROUTED DEPARTMENT</span>
+                <div style={{ fontWeight: 700, marginTop: '2px' }}>{emergencyModalTicket.assigned_dept || 'LESA Emergency Unit'}</div>
+              </div>
+              <div>
+                <span className="label" style={{ opacity: 0.6 }}>CITY LOCATION</span>
+                <div style={{ fontWeight: 700, marginTop: '2px' }}>{city} HQ (Ward {emergencyModalTicket.ward_id})</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
+              <button
+                onClick={() => {
+                  updateTicketStatus(emergencyModalTicket.id, 'in_progress', emergencyModalTicket.assigned_dept || 'Electricity Board (LESA)');
+                  dismissEmergencyModal();
+                }}
+                style={{
+                  backgroundColor: 'var(--danger)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '16px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  boxShadow: '0 0 15px rgba(224, 60, 49, 0.4)'
+                }}
+              >
+                🚨 DISPATCH EMERGENCY UNITS IMMEDIATELY
+              </button>
+
+              <button
+                onClick={dismissEmergencyModal}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: 'var(--primary-text)',
+                  border: '1px solid var(--border)',
+                  padding: '12px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase'
+                }}
+              >
+                MUTE ALARM & ACKNOWLEDGE
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
