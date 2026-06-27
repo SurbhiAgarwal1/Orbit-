@@ -123,9 +123,13 @@ export default function DashboardPage() {
   // Sync clock & load local citizen tickets & check query params
   useEffect(() => {
     fetchComplaints();
-    const saved = localStorage.getItem('orbit-citizen-complaints');
-    if (saved) {
-      setMyComplaintIds(JSON.parse(saved));
+    try {
+      const saved = localStorage.getItem('orbit-citizen-complaints');
+      if (saved) {
+        setMyComplaintIds(JSON.parse(saved));
+      }
+    } catch (err) {
+      console.warn('Failed to parse saved citizen complaint IDs:', err);
     }
 
     if (typeof window !== 'undefined') {
