@@ -14,7 +14,6 @@ model = None
 if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        # Using gemini-1.5-flash as it is fast and supports JSON output
         model = genai.GenerativeModel("gemini-1.5-flash")
     except Exception as e:
         print(f"Error configuring Gemini: {e}")
@@ -144,30 +143,63 @@ Respond ONLY with valid JSON. Do not write anything outside the JSON structure."
         return classify_complaint_offline(text)
 
 async def chat_assistant(complaint_id: str, user_message: str) -> Dict[str, Any]:
-    """Converses with a citizen or admin using mixed Hindi + English (Hinglish) friendly tone."""
+    """Converses with a citizen or admin using mixed Hindi + English (Hinglish) friendly tone tailored per city."""
+    msg_lower = user_message.lower()
+    
+    # Detect city context
+    detected_city = "Delhi" if "delhi" in msg_lower else "Mumbai" if "mumbai" in msg_lower else "Bengaluru" if "bengaluru" in msg_lower else "Lucknow"
+    
     if not model:
-        msg_lower = user_message.lower()
-        reply = "Namaste! Main ΩRBIT city assistant hoon. Main aapki kaise madad kar sakta hoon?"
+        reply = f"Namaste! Main ΩRBIT {detected_city} City Assistant hoon. Main aapki kaise madad kar sakta hoon?"
         
-        if any(k in msg_lower for k in ["worst ward", "poor ward", "kharab", "worst"]):
-            reply = "Is hafte Ward 3 (Indira Nagar) aur Ward 7 (Charbagh) me sabse zyada complaints reporting hui hai. Road maintenance aur garbage piles yahan major issues hain. We recommend sending inspection teams there immediately."
+        if any(k in msg_lower for k in ["name", "who are you", "kaun ho", "nam"]):
+            reply = f"Main ΩRBIT Smart City Central AI Assistant hoon. Main {detected_city} city operations, complaints tracking, aur emergency alerts monitoring sambhalta hoon."
+            
+        elif any(k in msg_lower for k in ["worst ward", "poor ward", "kharab", "worst"]):
+            if detected_city == "Delhi":
+                reply = "Is hafte Delhi me Karol Bagh aur Rohini wards me sabse zyada road damage aur power cut complaints file hui hain. Maintenance teams inspection mode me hain."
+            elif detected_city == "Mumbai":
+                reply = "Is hafte Mumbai me Bandra aur Dadar wards me drainage overflow aur waterlogging complaints higher side pe hain. BMC emergency units alert pe hain."
+            elif detected_city == "Bengaluru":
+                reply = "Is hafte Bengaluru me Whitefield aur Indiranagar wards me traffic congestion aur pothole reports surge pe hain. BBMP inspection recommended."
+            else:
+                reply = "Is hafte Lucknow me Ward 3 (Indira Nagar) aur Ward 7 (Charbagh) me sabse zyada complaints reporting hui hai. Road repair work scheduled hai."
+                
         elif any(k in msg_lower for k in ["aqi", "hawa", "pollution", "air"]):
-            reply = "Lucknow ka average AQI abhi 156 hai, jo ki 'Unhealthy for Sensitive Groups' category me aata hai. Aliganj aur Gomti Nagar areas me AQI readings higher side pe hain."
+            if detected_city == "Delhi":
+                reply = "Delhi ka average AQI abhi 210 hai ('Poor' category). Anand Vihar aur Connaught Place zones me air quality monitoring active hai."
+            elif detected_city == "Mumbai":
+                reply = "Mumbai ka average AQI abhi 112 hai ('Moderate' category). Coastal areas me ventilation clear hai."
+            elif detected_city == "Bengaluru":
+                reply = "Bengaluru ka average AQI abhi 88 hai ('Good/Moderate' category). City air index stable position me hai."
+            else:
+                reply = "Lucknow ka average AQI abhi 156 hai ('Unhealthy for Sensitive Groups'). Aliganj aur Gomti Nagar areas me readings higher side pe hain."
+                
         elif any(k in msg_lower for k in ["score", "health", "health score"]):
-            reply = "Abhi hamara city health score 73/100 hai. Kuch critical road problems resolve hone ke baad isme improvement aane ki umeed hai. Aasha hai ki hum jald hi 80 cross karenge!"
+            reply = f"Abhi {detected_city} ka composite city health score 78/100 hai. Priority tickets resolve hone ke sath health index continuously improve ho raha hai!"
+            
         elif any(k in msg_lower for k in ["road", "gaddha", "pothole"]):
-            reply = "Road complaints sabse high priority pe hain. PWD team ko direct alert bhej diya gaya hai aur major junctions pe repair works schedule ho chuke hain."
+            reply = f"{detected_city} road complaints PWD high priority supervision me hain. Field teams ko major junctions pe repair schedule bheja gaya hai."
+            
         elif complaint_id:
-            reply = f"Complaint #{complaint_id} ki detail check ki hai maine. Yeh concern direct assigned department ke supervision me hai aur iska status update hote hi aapko realtime notification mil jayega. Kuch aur janna chahte hain?"
+            reply = f"Complaint #{complaint_id} ki live details check ki hain maine. Concerns direct assigned department head ke supervision me hain. Realtime notification status updated hai."
+            
         else:
-            reply = "Aapka message mil gaya hai. Gomti Nagar aur Indira Nagar wards me cleaning teams deployed hain aur current complaints ko quickly resolve kiya ja raha hai. Koi aur question?"
+            if detected_city == "Delhi":
+                reply = "Aapka message mil gaya hai. Karol Bagh aur Connaught Place municipal sectors me active maintenance teams deployed hain. Koi aur concern?"
+            elif detected_city == "Mumbai":
+                reply = "Aapka message mil gaya hai. Bandra aur Colaba zones me BMC field officers active tracking pe hain. Kuch aur poochhna chahte hain?"
+            elif detected_city == "Bengaluru":
+                reply = "Aapka message mil gaya hai. Indiranagar aur Whitefield control rooms me BBMP teams dispatch state me hain. Tell me if you need anything else!"
+            else:
+                reply = "Aapka message mil gaya hai. Gomti Nagar aur Hazratganj wards me sanitation aur PWD teams current complaints resolve kar rahi hain. Koi aur query?"
             
         return {"reply": reply}
         
     prompt = f"""You are ΩRBIT, a friendly, intelligent Smart City AI Assistant.
 The user is asking: '{user_message}'
-Current context: complaint ID context is {complaint_id or 'none'}.
-Respond in a mix of Hindi and English (Hinglish), keeping a professional, supportive, and friendly tone. Max 3-4 sentences.
+Current context: City is {detected_city}, complaint ID context is {complaint_id or 'none'}.
+Respond in a mix of Hindi and English (Hinglish), keeping a professional, supportive, and friendly tone tailored specifically for {detected_city}. Max 3-4 sentences.
 Do not use emojis."""
 
     try:
