@@ -9,7 +9,7 @@
 ![Google Gemini](https://img.shields.io/badge/Gemini_AI-1.5_Flash-orange?style=flat-square&logo=google)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-blue?style=flat-square&logo=docker)
 
-ΩRBIT is an enterprise-grade Smart City Operating System designed to centralize municipal operations, automate civic grievance processing via generative artificial intelligence, and provide real-time spatial and 3D telemetry visualization. Built for high-concurrency civic environments, ΩRBIT integrates procedural WebGL urban modeling, automated Natural Language Processing (NLP) routing, real-time weather analytics, and multi-persona command centers.
+ΩRBIT is an enterprise-grade Smart City Operating System designed to centralize municipal operations, automate civic grievance processing via generative artificial intelligence, and provide  real-time spatial and 3D telemetry visualization. Built for high-concurrency civic environments, ΩRBIT integrates procedural WebGL urban modeling, automated Natural Language Processing (NLP) routing, real-time weather analytics, and multi-persona command centers.
 
 ---
 
