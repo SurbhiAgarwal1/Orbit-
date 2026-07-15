@@ -1,7 +1,7 @@
 # ΩRBIT — Smart City Operating System
 
-[![Vercel Deployment](https://img.shields.io/badge/Deployed_on-Vercel-black?logo=vercel&logoColor=white)](https://your-vercel-demo-link.vercel.app)
-[![Render Deployment](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=white)](https://your-render-api-link.onrender.com)
+[![Frontend Deployment](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel&logoColor=white)](https://orbit-alpha-three-77.vercel.app)
+[![Backend Deployment](https://img.shields.io/badge/Backend-Vercel-black?logo=vercel&logoColor=white)](https://orbit-rpsszwl1v-surbhiagarwal18s-projects.vercel.app)
 
 > **Every city has a pulse. We track it.**
 
