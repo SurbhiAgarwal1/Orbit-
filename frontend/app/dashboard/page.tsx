@@ -927,7 +927,7 @@ export default function DashboardPage() {
             gap: '20px',
             animation: 'breathing-pulse 1.2s infinite'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--danger)', pb: '12px', paddingBottom: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--danger)', paddingBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '24px', animation: 'ping 1s infinite' }}>🚨</span>
                 <span className="mono" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--danger)', letterSpacing: '0.08em' }}>
