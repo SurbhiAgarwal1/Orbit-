@@ -1,6 +1,14 @@
 # ΩRBIT — Smart City Operating System
 
+[![Vercel Deployment](https://img.shields.io/badge/Deployed_on-Vercel-black?logo=vercel&logoColor=white)](https://your-vercel-demo-link.vercel.app)
+[![Render Deployment](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=white)](https://your-render-api-link.onrender.com)
+
 > **Every city has a pulse. We track it.**
+
+## About the Project
+ΩRBIT is a modern solution to urban management, streamlining city operations through advanced spatial computing and artificial intelligence. By unifying data from disparate municipal departments into a single 3D interface, it allows city officials to visualize complaints, track public infrastructure health, and automatically triage issues using Google Gemini AI. 
+
+Whether you are tracking a localized pothole report or monitoring city-wide air quality, ΩRBIT provides the telemetry needed to keep the city moving.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
@@ -202,6 +210,23 @@ docker-compose up --build
 ```
 
 </details>
+
+---
+
+## Production Deployment
+
+### Frontend (Vercel)
+The Next.js frontend is heavily optimized for Vercel. 
+1. Link your GitHub repository to [Vercel](https://vercel.com).
+2. Set the Root Directory to `frontend`.
+3. Add your environment variables and deploy.
+
+### Backend (Render)
+The FastAPI backend requires a server environment like Render to run asynchronously.
+1. Link your GitHub repository to [Render](https://render.com) and create a New Web Service.
+2. Select the `backend` directory.
+3. Set the build command to `pip install -r requirements.txt` and start command to `uvicorn main:app --host 0.0.0.0 --port 10000`.
+4. Add your backend environment variables and deploy.
 
 ---
 
