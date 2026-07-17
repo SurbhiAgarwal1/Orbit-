@@ -6,7 +6,7 @@
 > **Every city has a pulse. We track it.**
 
 ## About the Project
-ΩRBIT is a modern solution to urban management, streamlining city operations through advanced spatial computing and artificial intelligence. By unifying data from disparate municipal departments into a single 3D interface, it allows city officials to visualize complaints, track public infrastructure health, and automatically triage issues using Google Gemini AI. 
+ΩRBIT is a modern solution to urban management, streamlining city operations through advanced spatial computing and artificial intelligence. By unifying data from disparate municipal departments into a single 3D interface,it allows city officials to visualize complaints, track public infrastructure health, and automatically triage issues using Google Gemini AI. 
 
 Whether you are tracking a localized pothole report or monitoring city-wide air quality, ΩRBIT provides the telemetry needed to keep the city moving.
 
