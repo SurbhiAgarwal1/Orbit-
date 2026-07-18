@@ -42,7 +42,7 @@ Whether you are tracking a localized pothole report or monitoring city-wide air 
 - **High-Friction Civic Reporting**: Citizens face complex submission portals, manual form filling, and  zero visibility into the real-time resolution status of their reported issues.
 
 ### The ΩRBIT Solution
-- **Target Resolution Velocity (4 Days)**: Automates municipal routing and ticket lifecycle management to compress average grievance lifecycles from 21 days down to 4 days.
+- **Target Resolution Velocity (4 Days)**: Automates municipal routing and ticket lifecycle management to compress average grievance lifecycles from 21  days down  to  4 days.
 - **Unified 3D Spatial Operating System**: Synthesizes real-time civic telemetry, OpenWeather atmospheric data, and ward-level health scoring into an interactive WebGL 3D urban twin and Leaflet GIS mapping overlay.
 - **Generative AI Triage & Multilingual Voice Accessibility**: Replaces manual form filing with Web Speech voice dictation (English/Hindi) and leverages Google Gemini AI for automated severity scoring (0-100), domain classification, and direct operational officer routing.
 
